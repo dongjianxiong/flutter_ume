@@ -8,6 +8,9 @@ class PluginManager {
 
   Map<String, Pluggable?> _pluginsMap = {};
 
+  List<Pluggable> get pluginsList => _pluginsList;
+  List<Pluggable> _pluginsList = [];
+
   Pluggable? _activatedPluggable;
   String? get activatedPluggableName => _activatedPluggable?.name;
 
@@ -25,11 +28,13 @@ class PluginManager {
     if (plugin.name.isEmpty) {
       return;
     }
+    _pluginsList.add(plugin);
     _pluginsMap[plugin.name] = plugin;
   }
 
   /// Register multiple [plugins]
   void registerAll(List<Pluggable> plugins) {
+    _pluginsList = plugins;
     for (final plugin in plugins) {
       register(plugin);
     }

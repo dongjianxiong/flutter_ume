@@ -35,7 +35,8 @@ class _MenuPageState extends State<MenuPage>
     List<Pluggable?> dataList = [];
     List<String>? list = await _storeManager.fetchStorePlugins();
     if (list == null || list.isEmpty) {
-      dataList = PluginManager.instance.pluginsMap.values.toList();
+      // PluginManager.instance.pluginsList
+      dataList = PluginManager.instance.pluginsList;///PluginManager.instance.pluginsMap.values.toList();
     } else {
       list.forEach((f) {
         bool contain = PluginManager.instance.pluginsMap.containsKey(f);
@@ -76,7 +77,7 @@ class _MenuPageState extends State<MenuPage>
           children: <Widget>[
             Container(
               color: Colors.white,
-              height: 100,
+              height: 120,
               width: MediaQuery.of(context).size.width,
               alignment: Alignment.bottomLeft,
               padding: const EdgeInsets.only(left: 16, right: 16),
@@ -94,8 +95,9 @@ class _MenuPageState extends State<MenuPage>
                             }
                           },
                           child: const CircleAvatar(
-                            radius: 10,
+                            radius: 15,
                             backgroundColor: Color(0xffff5a52),
+                            child: Icon(Icons.close, color: Colors.white,),
                           )),
                       const SizedBox(
                         width: 8,
@@ -107,8 +109,9 @@ class _MenuPageState extends State<MenuPage>
                             }
                           },
                           child: const CircleAvatar(
-                            radius: 10,
+                            radius: 15,
                             backgroundColor: Color(0xffe6c029),
+                            child: Icon(Icons.expand_less, color: Colors.white,),
                           )),
                     ],
                   ),

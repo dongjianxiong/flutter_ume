@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 
 import 'binding_ambiguate.dart';
 
@@ -16,16 +17,19 @@ const double kTooltipPadding = 5.0;
 
 const Color kTooltipBackgroundColor = Color.fromARGB(230, 60, 60, 60);
 
-const Color kHighlightedRenderObjectFillColor =
-    Color.fromARGB(128, 128, 128, 255);
+const Color kHighlightedRenderObjectFillColor = Color.fromARGB(128, 128, 128, 255);
 
-const Color kHighlightedRenderObjectBorderColor =
-    Color.fromARGB(128, 64, 64, 128);
+const Color kHighlightedRenderObjectBorderColor = Color.fromARGB(128, 64, 64, 128);
 
 const Color kTipTextColor = Color(0xFFFFFFFF);
 
-final double ratio =
-    bindingAmbiguate(WidgetsBinding.instance)!.window.devicePixelRatio;
+final double ratio = bindingAmbiguate(PlatformDispatcher.instance)!.implicitView!.devicePixelRatio;
+// bindingAmbiguate(WidgetsBinding.instance)!.window.devicePixelRatio;
 
 final Size windowSize =
-    bindingAmbiguate(WidgetsBinding.instance)!.window.physicalSize / ratio;
+    bindingAmbiguate(PlatformDispatcher.instance)!.implicitView!.physicalSize / ratio;
+// bindingAmbiguate(WidgetsBinding.instance)!.window.physicalSize / ratio;
+
+// final double ratio = bindingAmbiguate(WidgetsBinding.instance)!.window.devicePixelRatio;
+//
+// final Size windowSize = bindingAmbiguate(WidgetsBinding.instance)!.window.physicalSize / ratio;

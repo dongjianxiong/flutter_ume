@@ -7,3 +7,4 @@ export 'core/ui/global.dart';
 export 'service/inspector/inspector_overlay.dart';
 export 'service/vm_service/service_mixin.dart';
 export 'service/vm_service/service_wrapper.dart';
+export 'kits/kits.dart';

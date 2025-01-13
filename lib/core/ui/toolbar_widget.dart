@@ -1,19 +1,19 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ume/core/ui/icon_cache.dart';
+import 'package:flutter_ume/core/pluggable.dart';
 import 'package:flutter_ume/core/pluggable_message_service.dart';
-import 'package:flutter_ume/core/ui/panel_action_define.dart';
 import 'package:flutter_ume/core/plugin_manager.dart';
 import 'package:flutter_ume/core/red_dot.dart';
 import 'package:flutter_ume/core/store_manager.dart';
-import 'package:flutter_ume/core/pluggable.dart';
+import 'package:flutter_ume/core/ui/icon_cache.dart';
+import 'package:flutter_ume/core/ui/panel_action_define.dart';
 import 'package:flutter_ume/util/constants.dart';
 
 class ToolBarWidget extends StatefulWidget {
-  ToolBarWidget({Key? key, this.action, this.maximalAction, this.closeAction})
-      : super(key: key);
+  ToolBarWidget({Key? key, this.action, this.maximalAction, this.closeAction}) : super(key: key);
 
   final MenuAction? action;
   final CloseAction? closeAction;
@@ -23,7 +23,7 @@ class ToolBarWidget extends StatefulWidget {
   _ToolBarWidgetState createState() => _ToolBarWidgetState();
 }
 
-const double _dragBarHeight = 32;
+const double _dragBarHeight = 40;
 const double _minimalHeight = 80;
 
 class _ToolBarWidgetState extends State<ToolBarWidget> {
@@ -32,10 +32,10 @@ class _ToolBarWidgetState extends State<ToolBarWidget> {
 
   @override
   void initState() {
-    final bottomPadding = WidgetsBinding.instance.window.padding.bottom / ratio;
-    _maxDy =
-        windowSize.height - _minimalHeight - _dragBarHeight - bottomPadding;
+    final bottomPadding = PlatformDispatcher.instance.implicitView!.padding.bottom / ratio;
+    _maxDy = windowSize.height - _minimalHeight - _dragBarHeight - bottomPadding;
     _dy = _maxDy;
+    // _dy = 0;
     super.initState();
   }
 
@@ -61,12 +61,7 @@ class _ToolBarWidgetState extends State<ToolBarWidget> {
 }
 
 class _ToolBarContent extends StatefulWidget {
-  _ToolBarContent(
-      {Key? key,
-      this.action,
-      this.dragCallback,
-      this.maximalAction,
-      this.closeAction})
+  _ToolBarContent({Key? key, this.action, this.dragCallback, this.maximalAction, this.closeAction})
       : super(key: key);
 
   final MenuAction? action;
@@ -92,13 +87,11 @@ class __ToolBarContentState extends State<_ToolBarContent> {
   Widget build(BuildContext context) {
     const cornerRadius = Radius.circular(10);
     return Material(
-      borderRadius:
-          BorderRadius.only(topLeft: cornerRadius, topRight: cornerRadius),
+      borderRadius: BorderRadius.only(topLeft: cornerRadius, topRight: cornerRadius),
       elevation: 20,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius:
-              BorderRadius.only(topLeft: cornerRadius, topRight: cornerRadius),
+          borderRadius: BorderRadius.only(topLeft: cornerRadius, topRight: cornerRadius),
           color: Color(0xffd0d0d0),
         ),
         width: MediaQuery.of(context).size.width,
@@ -118,8 +111,12 @@ class __ToolBarContentState extends State<_ToolBarContent> {
                           }
                         },
                         child: const CircleAvatar(
-                          radius: 10,
+                          radius: 15,
                           backgroundColor: const Color(0xffff5a52),
+                          child: Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
                         )),
                     const SizedBox(
                       width: 8,
@@ -131,13 +128,16 @@ class __ToolBarContentState extends State<_ToolBarContent> {
                           }
                         },
                         child: const CircleAvatar(
-                          radius: 10,
+                          radius: 15,
                           backgroundColor: const Color(0xff53c22b),
+                          child: Icon(
+                            Icons.expand_more,
+                            color: Colors.white,
+                          ),
                         )),
                     Expanded(
                       child: GestureDetector(
-                        onVerticalDragUpdate: (details) =>
-                            _dragCallback(details),
+                        onVerticalDragUpdate: (details) => _dragCallback(details),
                         child: Container(
                           height: _dragBarHeight,
                           color: const Color(0xffd0d0d0),
@@ -175,7 +175,9 @@ class __ToolBarContentState extends State<_ToolBarContent> {
     List<Pluggable?> dataList = [];
     List<String>? list = await _storeManager.fetchStorePlugins();
     if (list == null || list.isEmpty) {
-      dataList = PluginManager.instance.pluginsMap.values.toList();
+      dataList = PluginManager.instance.pluginsList;
+
+      ///PluginManager.instance.pluginsMap.values.toList();
     } else {
       list.forEach((f) {
         bool contain = PluginManager.instance.pluginsMap.containsKey(f);
@@ -207,8 +209,7 @@ class __ToolBarContentState extends State<_ToolBarContent> {
 }
 
 class _PluginScrollContainer extends StatelessWidget {
-  _PluginScrollContainer({Key? key, required this.dataList, this.action})
-      : super(key: key);
+  _PluginScrollContainer({Key? key, required this.dataList, this.action}) : super(key: key);
 
   final List<Pluggable?> dataList;
   final MenuAction? action;
@@ -260,15 +261,12 @@ class _MenuCell extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Container(
-                      child: IconCache.icon(pluggableInfo: pluginData!),
-                      height: 28,
-                      width: 28),
+                      child: IconCache.icon(pluggableInfo: pluginData!), height: 28, width: 28),
                   Container(
                       margin: const EdgeInsets.only(top: 4),
                       child: Text(
-                        pluginData!.name,
-                        style:
-                            const TextStyle(fontSize: 12, color: Colors.black),
+                        pluginData?.displayName ?? pluginData?.name ?? '',
+                        style: const TextStyle(fontSize: 12, color: Colors.black),
                         maxLines: 1,
                       ))
                 ],

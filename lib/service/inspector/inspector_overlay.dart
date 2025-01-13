@@ -1,17 +1,15 @@
 import 'dart:convert';
+import 'dart:math' as math;
+import 'dart:ui' as ui;
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'dart:ui' as ui;
-import 'dart:math' as math;
 import 'package:flutter_ume/util/constants.dart';
 
 class InspectorOverlay extends LeafRenderObjectWidget {
   const InspectorOverlay(
-      {Key? key,
-      required this.selection,
-      this.needEdges = true,
-      this.needDescription = true})
+      {Key? key, required this.selection, this.needEdges = true, this.needDescription = true})
       : super(key: key);
 
   final InspectorSelection selection;
@@ -23,14 +21,11 @@ class InspectorOverlay extends LeafRenderObjectWidget {
   @override
   _RenderInspectorOverlay createRenderObject(BuildContext context) {
     return _RenderInspectorOverlay(
-        selection: selection,
-        needDescription: needDescription,
-        needEdges: needEdges);
+        selection: selection, needDescription: needDescription, needEdges: needEdges);
   }
 
   @override
-  void updateRenderObject(
-      BuildContext context, _RenderInspectorOverlay renderObject) {
+  void updateRenderObject(BuildContext context, _RenderInspectorOverlay renderObject) {
     renderObject.selection = selection;
   }
 }
@@ -158,15 +153,15 @@ class _InspectorOverlayLayer extends Layer {
           ..restore();
       }
     }
-    final Rect targetRect = MatrixUtils.transformRect(
-        state.selected.transform, state.selected.rect);
+    final Rect targetRect =
+        MatrixUtils.transformRect(state.selected.transform, state.selected.rect);
     final Offset target = Offset(targetRect.left, targetRect.center.dy);
     const double offsetFromWidget = 9.0;
     final double verticalOffset = (targetRect.height) / 2 + offsetFromWidget;
 
     if (needDescription) {
-      _paintDescription(canvas, state.selectionInfo.message,
-          state.textDirection, target, verticalOffset, size, targetRect);
+      _paintDescription(canvas, state.selectionInfo.message, state.textDirection, target,
+          verticalOffset, size, targetRect);
     }
     return recorder.endRecording();
   }
@@ -181,25 +176,21 @@ class _InspectorOverlayLayer extends Layer {
     Rect targetRect,
   ) {
     canvas.save();
-    final double maxWidth =
-        size.width - 2 * (kScreenEdgeMargin + kTooltipPadding);
+    final double maxWidth = size.width - 2 * (kScreenEdgeMargin + kTooltipPadding);
     final TextSpan? textSpan = _textPainter?.text as TextSpan?;
-    if (_textPainter == null ||
-        textSpan!.text != message ||
-        _textPainterMaxWidth != maxWidth) {
+    if (_textPainter == null || textSpan!.text != message || _textPainterMaxWidth != maxWidth) {
       _textPainterMaxWidth = maxWidth;
       _textPainter = TextPainter()
         ..maxLines = kMaxTooltipLines
         ..ellipsis = '...'
         ..text = TextSpan(
-            style: TextStyle(color: kTipTextColor, fontSize: 12.0, height: 1.2),
-            text: message)
+            style: TextStyle(color: kTipTextColor, fontSize: 12.0, height: 1.2), text: message)
         ..textDirection = textDirection
         ..layout(maxWidth: maxWidth);
     }
 
-    final Size tooltipSize = _textPainter!.size +
-        const Offset(kTooltipPadding * 2, kTooltipPadding * 2);
+    final Size tooltipSize =
+        _textPainter!.size + const Offset(kTooltipPadding * 2, kTooltipPadding * 2);
     final Offset tipOffset = positionDependentBox(
       size: size,
       childSize: tooltipSize,
@@ -232,15 +223,13 @@ class _InspectorOverlayLayer extends Layer {
       Offset(wedgeX, wedgeY + (tooltipBelow ? -wedgeSize : wedgeSize)),
     ];
     canvas.drawPath(Path()..addPolygon(wedge, true), tooltipBackground);
-    _textPainter!.paint(
-        canvas, tipOffset + const Offset(kTooltipPadding, kTooltipPadding));
+    _textPainter!.paint(canvas, tipOffset + const Offset(kTooltipPadding, kTooltipPadding));
     canvas.restore();
   }
 
   @override
   @protected
-  bool findAnnotations<S extends Object>(
-      AnnotationResult<S> result, Offset localPosition,
+  bool findAnnotations<S extends Object>(AnnotationResult<S> result, Offset localPosition,
       {required bool onlyFirst}) {
     return false;
   }
@@ -260,8 +249,7 @@ class _SelectionInfo {
         // ignore: invalid_use_of_protected_member
         .toId(renderObject!.toDiagnosticsNode(), '');
     if (widgetId == null) return null;
-    String infoStr =
-        WidgetInspectorService.instance.getSelectedSummaryWidget(widgetId, '');
+    String infoStr = WidgetInspectorService.instance.getSelectedSummaryWidget(widgetId, '');
     return json.decode(infoStr);
   }
 
@@ -310,8 +298,7 @@ class _InspectorOverlayRenderState {
   }
 
   @override
-  int get hashCode =>
-      Object.hash(overlayRect, selected, Object.hashAll(candidates));
+  int get hashCode => Object.hash(overlayRect, selected, Object.hashAll(candidates));
 }
 
 class _TransformedRect {

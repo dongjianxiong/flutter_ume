@@ -26,7 +26,7 @@ class FloatingWidget extends StatefulWidget {
   _FloatingWidgetState createState() => _FloatingWidgetState();
 }
 
-const double _dragBarHeight = 32;
+const double _dragBarHeight = 40;
 const double _toolBarHeight = 32;
 
 class _FloatingWidgetState extends State<FloatingWidget> with StoreMixin {
@@ -173,8 +173,9 @@ class __ToolBarContentState extends State<_ToolBarContent> {
                             }
                           },
                           child: const CircleAvatar(
-                            radius: 10,
+                            radius: 15,
                             backgroundColor: const Color(0xffff5a52),
+                            child: Icon(Icons.close, color: Colors.white,),
                           )),
                       const SizedBox(
                         width: 8,
@@ -189,10 +190,12 @@ class __ToolBarContentState extends State<_ToolBarContent> {
                             });
                           },
                           child: CircleAvatar(
-                            radius: 10,
+                            radius: 15,
                             backgroundColor: _fullScreen
                                 ? const Color(0xffe6c029)
                                 : const Color(0xff53c22b),
+                            child: Icon(Icons.expand_more, color: Colors.white,),
+
                           )),
                       Expanded(
                         child: GestureDetector(

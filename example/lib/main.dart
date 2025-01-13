@@ -6,16 +6,9 @@ import 'package:example/ume_switch.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ume/flutter_ume.dart';
-import 'package:flutter_ume_kit_ui/flutter_ume_kit_ui.dart';
-import 'package:flutter_ume_kit_perf/flutter_ume_kit_perf.dart';
-import 'package:flutter_ume_kit_show_code/flutter_ume_kit_show_code.dart';
-import 'package:flutter_ume_kit_device/flutter_ume_kit_device.dart';
-import 'package:flutter_ume_kit_console/flutter_ume_kit_console.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_ume_kit_dio/flutter_ume_kit_dio.dart';
-import 'package:flutter_ume_kit_channel_monitor/flutter_ume_kit_channel_monitor.dart';
 
-final Dio dio = Dio()..options = BaseOptions(connectTimeout: 10000);
+final Dio dio = Dio()..options = BaseOptions(connectTimeout: Duration(seconds: 10000));
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -34,24 +27,59 @@ class _UMEAppState extends State<UMEApp> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       CustomRouterPluggable().navKey = navigatorKey;
+      _setup();
     });
-    if (kDebugMode) {
+  }
+
+  void _setup() async {
+    if (!kReleaseMode) {
+      await HzBoxSharedPref.init();
+      dio.interceptors.add(DioInspector.dioInterceptor);
+
+      // PluginManager.instance.registerAll([
+      //   DioInspector(),
+      //   if(kDebugMode) WidgetInfoInspector(),
+      //   if(kDebugMode) WidgetDetailInspector(),
+      //   MemoryInfoPage(),
+      // ]);
+
       PluginManager.instance
+        ..register(LocationPlugin(onFinish: (isInit) {
+          print(LocationProvider.value);
+          print(SimulatedNaviProvider.value);
+        }))
+        ..register(ServiceEnvPlugin(onFinish: (isInit) {
+          print(ServiceEnvProvider.value);
+        }))
+        ..register(LogLevelPlugin(onFinish: (isInit) {
+          print(LogLevelProvider.value);
+        }))
+        ..register(DioInspector())
+        ..register(CustomPlugin(
+            eventNames: ['进入首页', '进入接单页面'],
+            onFinish: (String eventName) {
+              print('Event name $eventName');
+            }))
+        ..register(TouchIndicator())
+        ..register(Performance())
+        ..register(Console())
         ..register(WidgetInfoInspector())
         ..register(WidgetDetailInspector())
         ..register(ColorSucker())
-        ..register(AlignRuler())
         ..register(ColorPicker())
-        ..register(TouchIndicator())
-        ..register(Performance())
-        ..register(ShowCode())
         ..register(MemoryInfoPage())
         ..register(CpuInfoPage())
         ..register(DeviceInfoPanel())
-        ..register(Console())
-        ..register(DioInspector(dio: dio))
+        ..register(AlignRuler())
         ..register(CustomRouterPluggable())
-        ..register(ChannelPlugin());
+        ..register(ShowCode())
+        ..register(ChannelPlugin())
+        ..register(HttpsProxyPlugin(
+          (event) => {
+            debugPrint("event-----"),
+            debugPrint(event),
+          },
+        ));
     }
   }
 
