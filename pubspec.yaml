@@ -21,7 +21,7 @@ dependencies:
   string_scanner: any
   dio: any
   system_info: any
-  device_info: any
+  device_info_plus: any
   platform: any
   tuple: any
   rxdart: any
