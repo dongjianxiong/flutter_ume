@@ -4,28 +4,19 @@ version: 1.0.1
 publish_to: none
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ^3.7.0
 
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^6.0.3
+  provider: any
   # For Dio Kit
-  dio: ^5.4.1
-  flutter_ume:
-    git:
-      url: http://gitlab.hzcxfw.com/terminal/structure/flutter_ume.git
-      ref: main
-
-dependency_overrides:
-  vm_service: ^13.0.0
-  flutter_ume:
-    path: ../
+  dio: any
 
 dev_dependencies:
   flutter_driver:
     sdk: flutter
-  test: ^1.16.6
+  test: any
   flutter_ume:
     path: ../
 
