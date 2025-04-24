@@ -18,7 +18,7 @@ enum ServiceEnvType {
 }
 
 class ServiceEnvProvider with HzBoxBaseProvider<ServiceEnvType> {
-  static ServiceEnvType value = kReleaseMode ? ServiceEnvType.release : ServiceEnvType.dev;
+  static ServiceEnvType value = ServiceEnvType.release;
 
   ServiceEnvProvider() {
     String? name = HzBoxSharedPref.getValueForKey('HzBoxServiceEnvType');
