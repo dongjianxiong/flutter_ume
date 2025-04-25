@@ -14,38 +14,35 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  touch_indicator: any
-  shared_preferences: any
-  share: any
-  vm_service: any
-  string_scanner: any
-  dio: any
-  system_info: any
-  device_info_plus: any
-  platform: any
-  tuple: any
-  rxdart: any
-  image: any
-  quiver: any
-  basics: any
+  touch_indicator: ^2.0.0
+  shared_preferences: ^2.2.3
+  share: ^2.0.4
+  vm_service: ^14.3.1
+  string_scanner: ^1.4.1
+  dio: ^5.7.0
+  system_info: ^1.0.1
+  device_info_plus: ^10.1.2
+  platform: ^3.1.6
+  tuple: ^2.0.2
+  rxdart: ^0.26.0
+  image: ^4.5.2
+  quiver: ^3.2.2
+  basics: ^0.10.0
 
 dev_dependencies:
-  flutter_lints: any
+  flutter_lints: ^2.0.3
   flutter_test:
     sdk: flutter
-  melos: any
-  mockito: any
+  melos: ^3.4.0
+  mockito: ^5.4.4
   flutter_coverage_badge:
     git:
       url: https://github.com/smileShirely/flutter_coverage_badge.git
       ref: 59b7580f406bb712e9d9049c8c99212946e34f65
-  lints: any
+  lints: ^2.1.1
 #  image: ^4.0.15
 #  quiver: ^3.2.1
 #  basics: ^0.10.0
-
-dependency_overrides:
-  vm_service: any
 
 flutter:
   uses-material-design: true

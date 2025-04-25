@@ -23,7 +23,7 @@ class ServiceEnvProvider with HzBoxBaseProvider<ServiceEnvType> {
   ServiceEnvProvider() {
     String? name = HzBoxSharedPref.getValueForKey('HzBoxServiceEnvType');
     print('ServiceEnvProvider:===name:$name');
-    name ??= kReleaseMode ? ServiceEnvType.release.name : ServiceEnvType.dev.name;
+    name ??= ServiceEnvType.release.name;
     for (var element in ServiceEnvType.values) {
       if (element.name == name) {
         // level = element;
